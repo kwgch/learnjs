@@ -1,6 +1,6 @@
 describe('LearnJS', function(){
 
-	it('can show a probrem view', function(){
+	it('can show a problem view', function(){
 		learnjs.showView('#problem-1');
 		expect($('.view-container .problem-view').length).toEqual(1);
 	});
@@ -14,5 +14,25 @@ describe('LearnJS', function(){
 		spyOn(learnjs, 'problemView');
 		learnjs.showView('#problem-42');
 		expect(learnjs.problemView).toHaveBeenCalledWith('42');
+	});
+
+	describe('problem view', function(){
+		it('has a title that includes the problem number', function(){
+			var view = learnjs.problemView('1');
+			expect('Problem #1 Coming soon!').toEqual(view.text());
+		});
+	});
+
+	it('invokes the router loaded', function(){
+		spyOn(learnjs, 'showView');
+		learnjs.appOnReady();
+		expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
+	});
+
+	it('subscribe to the hash change event', function(){
+		learnjs.appOnReady();
+		spyOn(learnjs, 'showView');
+		$(window).trigger('hashchange');
+		expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
 	});
 });
